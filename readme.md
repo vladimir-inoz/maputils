@@ -16,17 +16,22 @@ ___Системные требования___
 4. Установленный CMake.
 
 ___Сборка на Debian Linux___
+
 В Debian по-умолчанию установлен GDAL версии 1.X, поэтому GDAL 2.1.0 требуется установить вручную. Инструкции по установке находятся в README в корне папки GDAL.
 
 Boost по-умолчанию включен в дистрибутив Debian, поэтому устанавливать его не нужно
 
 cmake .
+
 make -j12
 
 ___Сборка на Windows 7 x64___
+
 Сгенерировать проект Visual Studio в CMake
 
 Собрать проект в Visual Studio
 
 ___Splitter___
-
+![alt text](stage1.png)
+![alt text](stage2.png)
+![alt text](stage3.png)
