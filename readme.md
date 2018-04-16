@@ -32,6 +32,6 @@ ___Сборка на Windows 7 x64___
 Собрать проект в Visual Studio
 
 ___Splitter___
-![alt text](./stage1.png)
-![alt text](./stage2.png)
-![alt text](./stage3.png)
+![alt text](https://github.com/vladimir-inoz/maputils/blob/test_readme/stage1.PNG)
+![alt text](https://github.com/vladimir-inoz/maputils/blob/test_readme/stage2.PNG)
+![alt text](https://github.com/vladimir-inoz/maputils/blob/test_readme/stage3.PNG)
