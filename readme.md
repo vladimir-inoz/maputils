@@ -11,25 +11,27 @@
 ___Системные требования___
 
 1. Установленные и собранные библиотеки GDAL 2.1.0, boost 1.55, GTest.
-2. Visual Studio 2013 или новее.
+2. Для Windows - установленная Visual Studio 2013.
 3. ГИС-приложение - желательно QGIS, но можно и любое другое с поддержкой S-57 и SHP.
 4. Установленный CMake.
 
-___Сборка на Debian Linux___
+___Сборка в Debian Linux___
 
-В Debian по-умолчанию установлен GDAL версии 1.X, поэтому GDAL 2.1.0 требуется установить вручную. Инструкции по установке находятся в README в корне папки GDAL.
+В Debian по-умолчанию установлен GDAL версии 1.X, поэтому GDAL 2.1.0 требуется установить вручную из официального репозитория.
 
 Boost по-умолчанию включен в дистрибутив Debian, поэтому устанавливать его не нужно
 
+```
+cd <path-to-maputils>
 cmake .
-
 make -j12
+```
 
-___Сборка на Windows 7 x64___
+___Сборка в Windows___
 
-Сгенерировать проект Visual Studio в CMake
-
-Собрать проект в Visual Studio
+В Windows все необходимые библиотеки скачиваются и собираются отдельно.
+Для генерации проекта Visual Studio необходимо перейти в папку maputils и в CMake GUI выполнить "Configure" и "Generate".
+Далее собрать проект в Visual Studio.
 
 ___Splitter___
 
@@ -84,7 +86,7 @@ ___Bridges___
 ![alt text](https://github.com/vladimir-inoz/maputils/blob/test_readme/stage3.PNG)
 
 
-___Решение исходой задачи с использованием bash___
+___Решение исходой задачи с использованием скриптовых языков___
 
 Описанные выше приложение не выполняют объединение и упрощение полигонов, поскольку данный функционал уже реализован в приложении ogr2ogr, входящего в комплект поставки библиотеки GDAL.
 
@@ -93,28 +95,37 @@ ___Решение исходой задачи с использованием ba
 ```
 #Переходим в целевую папку
 cd S57Maps &&
+
 #Очищаем папку
 rm *.shp
 rm *.shx rm *.dbf
+
 #Переводим исходную карту в формат Shapefile
 ogr2ogr source.shp source.s57 -f "ESRI Shapefile"
+
 #Разделяем регулярной сеткой на тайлы
 Splitter source.s57 LNDARE "ESRI Shapefile" tiles.shp
+
 #Кластеризуем тайлы по расположению центроидов
 ClasterizeByCentroids tiles.shp tiles 10
+
 #Создаем мостики
 for i in {0..9} do
 	Bridges claster_$i.shp claster_$i "ESRI Shapefile" bridges_$i.shp
 done
+
 #Соединяем мостики в один файл
 for f in bridges_*.shp do
 	ogr2ogr -update -append appended.shp $f -f "ESRI Shapefile"
 done
 ogr2ogr -update -append -skipfailures appended.shp source.s57 -f "S57" "LNDARE"
+
 #Склеиваем полигоны
 ogr2ogr merged.shp appended.shp -dialect sqlite -sql "SELECT ST_Union (geometry) AS geometry
+
 #Упрощаем геометрию
 ogr2ogr result.shp merged.shp -simplify 0.00005
+
 #Показываем результат
 qgis result.shp source.s57
 ```
